@@ -1,12 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>MRT Assistant</title>
-</head>
-<body>
-
-<h2>MRT Assistant</h2>
-<p>Chatbot coming soon...</p>
-
-</body>
-</html>
+‎<!DOCTYPE html>
+‎<html>
+‎<head>
+‎  <title>MRT Assistant</title>
+‎  <style>
+‎    body { font-family: Arial; background: #0f172a; color: white; }
+‎    #chat { height: 400px; overflow-y: auto; border: 1px solid gray; padding: 10px; }
+‎    input { width: 75%; padding: 10px; }
+‎    button { padding: 10px; cursor: pointer; }
+‎  </style>
+‎</head>
+‎<body>
+‎
+‎<h2>MRT Assistant</h2>
+‎<div id="chat"></div>
+‎
+‎<input id="msg" placeholder="আপনার প্রশ্ন লিখুন..." />
+‎<button onclick="send()">Send</button>
+‎
+‎<script>
+‎const API_KEY = "AIzaSyCe41KEBCPajZ5QgOvEYj8w2lU6ZUfvD7s";
+‎
+‎async function send() {
+‎  let msg = document.getElementById("msg").value;
+‎  let chat = document.getElementById("chat");
+‎
+‎  chat.innerHTML += "<p><b>You:</b> " + msg + "</p>";
+‎
+‎  let response = await fetch(
+‎    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY,
+‎    {
+‎      method: "POST",
+‎      headers: { "Content-Type": "application/json" },
+‎      body: JSON.stringify({
+‎        contents: [{ parts: [{ text: msg }] }]
+‎      })
+‎    }
+‎  );
+‎
+‎  let data = await response.json();
+‎  let reply = data.candidates[0].content.parts[0].text;
+‎
+‎  chat.innerHTML += "<p><b>MRT Assistant:</b> " + reply + "</p>";
+‎}
+‎</script>
+‎
+‎</body>
+‎</html>
+‎
